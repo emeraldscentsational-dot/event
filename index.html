@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Money Spender</title>
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    iframe {
+      width: 100%;
+      height: 90vh;
+      border: none;
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+ 
+  <h2>Generate and View Non-Editable PDF</h2>
+  <button onclick="createAndDisplayPDF()">Generate & View PDF</button>
+ 
+  <iframe id="pdfViewer" style="display:none;"></iframe>
+ 
+  <script>
+    async function createAndDisplayPDF() {
+      const { PDFDocument, rgb } = PDFLib;
+ 
+      // Create a new PDF
+      const pdfDoc = await PDFDocument.create();
+      const page = pdfDoc.addPage([595, 842]); // A4 size
+ 
+      // Draw text directly (non-editable)
+      page.drawText('Certificate of Chopping money', {
+        x: 50,
+        y: 750,
+        size: 24,
+        color: rgb(0, 0, 0),
+      });
+ 
+      page.drawText('Awarded to: Joseph', {
+        x: 50,
+        y: 700,
+        size: 18,
+        color: rgb(0.2, 0.2, 0.2),
+      });
+ 
+      page.drawText('Date: June 18, 2025', {
+        x: 50,
+        y: 670,
+        size: 16,
+        color: rgb(0.2, 0.2, 0.2),
+      });
+ 
+      // OPTIONAL: Add password restrictions (if desired)
+      // Note: pdf-lib does not yet support password encryption directly
+ 
+      // Save PDF
+      const pdfBytes = await pdfDoc.save();
+ 
+      // Create Blob and URL
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+ 
+      // Show in iframe
+      const iframe = document.getElementById('pdfViewer');
+      iframe.src = url + "#toolbar=0&navpanes=0&scrollbar=0";
+      iframe.style.display = 'block';
+ 
+      // Optional: Trigger auto-download after 3 seconds
+      setTimeout(() => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'non-editable-document.pdf';
+        a.click();
+      }, 3000);
+    }
+  </script>
+ 
+</body>
+</html>

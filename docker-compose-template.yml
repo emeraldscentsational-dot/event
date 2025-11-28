@@ -1,0 +1,7 @@
+services:
+  tecvinsoneventlandingpage:
+    image: ACR_LOGIN_SERVER/APP_NAME:IMAGE_TAG
+    container_name: APP_NAME
+    ports:
+      - "80:80"
+    restart: unless-stopped

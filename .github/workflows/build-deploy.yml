@@ -1,0 +1,27 @@
+name: Use Reusable Workflow for deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  call-deploy:
+    uses: Tecvinson-AB/workflows/.github/workflows/eventmatcha_reusable.yaml@main
+    secrets:
+      vm_user_name: ${{ secrets.VM_USER_NAME_DEV }}
+      vm_password: ${{ secrets.VM_PASSWORD_DEV }}
+      vm_ip_address: ${{ secrets.VM_IP_ADDRESS_DEV }}
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      registry_login_server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+      registry_username: ${{ secrets.REGISTRY_USERNAME }}
+      registry_password: ${{ secrets.REGISTRY_PASSWORD }}
+      mongodb_connection_string: ${{ secrets.MONGODB_CONNECTION_STRING }}
+    with:
+      app_name: "tecvinsoneventlandingpage"
+      docker_build_dir: "."
